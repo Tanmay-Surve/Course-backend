@@ -1,103 +1,43 @@
-# 📚 Course Search API (Spring Boot + Elasticsearch)
+📚 Course Search API with Elasticsearch
+A beginner-friendly Spring Boot application that helps you search and filter courses with powerful Elasticsearch features.
 
-A Spring Boot application that indexes and searches course data using Elasticsearch. It supports full-text search, filters, sorting, pagination, autocomplete, and fuzzy matching.
+🚀 Features
+✅ Search Courses - Find courses by title, description, or keywords
+✅ Filters - Narrow down by category, age range, price, and more
+✅ Sorting - Sort by price (low-high/high-low) or upcoming sessions
+✅ Pagination - Browse results page by page
+✅ Autocomplete (Bonus) - Get instant suggestions as you type
+✅ Fuzzy Search (Bonus) - Find results even with typos
 
----
+⚙️ Prerequisites
+Before running the project, make sure you have:
+Java 17+ (Recommended: OpenJDK)
+Docker (For Elasticsearch) - Install Docker
+Maven (For building the project)
 
-## 🚀 Features
+🛠 Setup & Run
+1️⃣ Start Elasticsearch (Using Docker)
+Open a terminal and run: docker-compose up -d
 
-✅ Bulk index 50+ course documents  
-✅ Full-text search on title and description  
-✅ Filters: age, category, type, price, session date  
-✅ Sorting: upcoming session, price (asc/desc)  
-✅ Pagination  
-✅ Autocomplete suggestions *(Bonus)* 
+✅ Verify Elasticsearch is running: curl http://localhost:9200
+(You should see a JSON response with "You Know, for Search")
 
----
+2️⃣ Run the Spring Boot Application
+Build the project: ./mvnw clean install
+Start the application: ./mvnw spring-boot:run
+📌 Server will start at: http://localhost:8080
 
-## 📦 Tech Stack
+🔍 How to Use the API
+1️⃣ Search Courses (GET /api/search)
+📌 Example API Requests
+1. Basic Search: curl "http://localhost:8080/api/search?q=math"
+2. Filter by Category & Price: curl "http://localhost:8080/api/search?category=Science&minPrice=100&maxPrice=500"
+3. Sort by Price (Low to High): curl "http://localhost:8080/api/search?sort=priceAsc"
+4. Upcoming Courses Only: curl "http://localhost:8080/api/search?startDate=2025-07-01"
 
-- Java 21
-- Spring Boot 3.x
-- Spring Data Elasticsearch
-- Elasticsearch 7.17
-- Docker + Docker Compose
-- Maven
-
----
-
-## 🗂️ Project Structure
-
-com.tanmay.courseapp
-├── config/ # Elasticsearch settings and DataLoader
-├── controller/ # REST APIs for search and suggestions
-├── document/ # CourseDocument for indexing
-├── dto/ # Request/response DTOs
-├── repository/ # Spring Data Elasticsearch interface
-├── service/ # Business logic for querying ES
-└── resources/
-├── application.yml
-├── elasticsearch-settings.json
-├── course-mappings.json
-└── sample-courses.json
-
----
-
-## 🐳 1. Start Elasticsearch via Docker
-
-### ✅ Prerequisite
-- Install [Docker](https://docs.docker.com/get-docker/)
-
-### ▶️ Run Elasticsearch
-
-In the project root, run:
-
-docker-compose up -d
-This starts a single-node Elasticsearch cluster at:
-http://localhost:9200
-You should see a JSON response with "You Know, for Search".
-
-⚙️ 2. Run the Spring Boot App
-🔨 Build the application
-./mvnw clean install
-
-🚀 Start the application
-./mvnw spring-boot:run
-The server will start at:
-http://localhost:8080
-
-🔍 3. Usage – Search API
-
-GET /api/search
-Query Parameters
-Param	Description
-q	Keyword (searches title + description)
-minAge	Minimum age filter
-maxAge	Maximum age filter
-category	Filter by course category
-type	Filter by type (ONE_TIME, COURSE, CLUB)
-minPrice	Minimum price
-maxPrice	Maximum price
-startDate	ISO-8601 start date filter
-sort	Sort by upcoming, priceAsc, priceDesc
-page	Page number (default: 0)
-size	Page size (default: 10)
-
-
-# Basic full-text search + age + price sorting
-curl "http://localhost:8080/api/search?q=math&minAge=6&sort=priceAsc&page=0&size=5"
-
-# Filter by category and type
-curl "http://localhost:8080/api/search?category=Science&type=COURSE"
-
-# Range price filter
-curl "http://localhost:8080/api/search?minPrice=200&maxPrice=500"
-
-# Upcoming courses only
-curl "http://localhost:8080/api/search?startDate=2025-07-10"
-
-
-💡 4. Autocomplete (Bonus)
-curl "http://localhost:8080/api/search/suggest?q=phy"
+🎯 Bonus Features
+1️⃣ Autocomplete Suggestions (GET /api/search/suggest)
+📌 Example API Requests
+Basic Search: curl "http://localhost:8080/api/search/suggest?q=phy"
 
 🙌 Thank You!
