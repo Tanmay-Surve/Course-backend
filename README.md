@@ -131,6 +131,8 @@ Expected Response:
   ...
 ]
 ```
+3. Fuzzy Search (Assignment B - Not Implemented)
+The fuzzy search functionality for the /api/search endpoint (e.g., matching "dinors" to "Dinosaurs 101") is not implemented in this project.
 
 ## Configuration
 - Application properties are defined in `src/main/resources/application.yml`:
