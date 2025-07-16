@@ -1,15 +1,13 @@
-# Spring Boot Elasticsearch Course Search Application
+Spring Boot Elasticsearch Course Search Application
+This project is a Spring Boot application that indexes course data into Elasticsearch and provides REST endpoints for searching courses with filtering, sorting, pagination, and autocomplete suggestions (Assignment B - partial). Note: The fuzzy search functionality for Assignment B is not implemented.
+Prerequisites
 
-This project is a Spring Boot application that indexes course data into Elasticsearch and provides REST endpoints for searching courses with filtering, sorting, pagination, and optional autocomplete and fuzzy search features. Below are the instructions to set up, run, and test the application.
+Java 17 or later
+Maven 3.8.x or later
+Docker and Docker Compose
+curl or any HTTP client (e.g., Postman) for testing
 
-## Prerequisites
-- Java 17 or later
-- Maven 3.8.x or later
-- Docker and Docker Compose
-- curl or any HTTP client (e.g., Postman) for testing
-
-## Project Structure
-```
+Project Structure
 ├── src
 │   ├── main
 │   │   ├── java
@@ -25,129 +23,121 @@ This project is a Spring Boot application that indexes course data into Elastics
 │   └── test                         # Unit and integration tests
 ├── docker-compose.yml               # Elasticsearch Docker setup
 └── README.md                        # This file
-```
 
-## Setup Instructions
+Setup Instructions
+1. Launch Elasticsearch
 
-### 1. Launch Elasticsearch
-1. Ensure Docker is running.
-2. Start a single-node Elasticsearch cluster using Docker Compose:
-   ```bash
-   docker-compose up -d
-   ```
-3. Verify Elasticsearch is running:
-   ```bash
-   curl http://localhost:9200
-   ```
-   Expected output:
-   ```json
-   {
-     "name": "...",
-     "cluster_name": "docker-cluster",
-     "version": { "number": "8.11.0", ... },
-     ...
-   }
-   ```
+Ensure Docker is running.
+Start a single-node Elasticsearch cluster using Docker Compose:docker-compose up -d
 
-### 2. Build and Run the Application
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd <repository-directory>
-   ```
-2. Build the project:
-   ```bash
-   mvn clean install
-   ```
-3. Run the Spring Boot application:
-   ```bash
-   mvn spring-boot:run
-   ```
-4. The application will start on `http://localhost:8080`.
 
-### 3. Data Ingestion
-- The application automatically loads `sample-courses.json` from `src/main/resources` on startup and bulk-indexes the data into the `courses` index in Elasticsearch.
-- To verify data ingestion, check the logs for a message like:
-  ```
-  Successfully indexed 50 courses to Elasticsearch
-  ```
-- Alternatively, query the index:
-  ```bash
-  curl http://localhost:9200/courses/_count
-  ```
+Verify Elasticsearch is running:curl http://localhost:9200
 
-## API Endpoints
+Expected output:{
+  "name": "...",
+  "cluster_name": "docker-cluster",
+  "version": { "number": "8.11.0", ... },
+  ...
+}
 
-### 1. Search Courses (Assignment A)
-**Endpoint**: `GET /api/search`
 
-**Query Parameters**:
-- `q`: Search keyword for title and description (optional)
-- `minAge`, `maxAge`: Age range filter (optional, numeric)
-- `category`: Exact category filter (e.g., "Math", "Science") (optional)
-- `type`: Exact type filter (e.g., "ONE_TIME", "COURSE", "CLUB") (optional)
-- `minPrice`, `maxPrice`: Price range filter (optional, decimal)
-- `startDate`: Filter courses on or after this ISO-8601 date (e.g., "2025-06-01T00:00:00Z") (optional)
-- `sort`: Sort order (`upcoming`, `priceAsc`, `priceDesc`) (default: `upcoming`)
-- `page`: Page number (default: 0)
-- `size`: Results per page (default: 10)
 
-**Example Requests**:
-1. Search for "Physics" courses in the "Science" category, sorted by price ascending:
-   ```bash
-   curl "http://localhost:8080/api/search?q=Physics&category=Science&sort=priceAsc"
-   ```
-   Expected Response:
-   ```json
-   {
-     "total": 5,
-     "courses": [
-       { "id": "1", "title": "Physics 101", "category": "Science", "price": 50.0, "nextSessionDate": "2025-06-10T15:00:00Z" },
-       ...
-     ]
-   }
-   ```
+2. Build and Run the Application
 
-2. Search courses for ages 10–14, starting after June 1, 2025:
-   ```bash
-   curl "http://localhost:8080/api/search?minAge=10&maxAge=14&startDate=2025-06-01T00:00:00Z"
-   ```
+Clone the repository:git clone <repository-url>
+cd <repository-directory>
 
-### 2. Autocomplete Suggestions (Assignment B - Bonus)
-**Endpoint**: `GET /api/search/suggest`
 
-**Query Parameters**:
-- `q`: Partial title for autocomplete suggestions (required)
+Build the project:mvn clean install
 
-**Example Request**:
-```bash
-curl "http://localhost:8080/api/search/suggest?q=phy"
-```
+
+Run the Spring Boot application:mvn spring-boot:run
+
+
+The application will start on http://localhost:8080.
+
+3. Data Ingestion
+
+The application automatically loads sample-courses.json from src/main/resources on startup and bulk-indexes the data into the courses index in Elasticsearch.
+To verify data ingestion, check the logs for a message like:Successfully indexed 50 courses to Elasticsearch
+
+
+Alternatively, query the index:curl http://localhost:9200/courses/_count
+
+
+
+API Endpoints
+1. Search Courses (Assignment A)
+Endpoint: GET /api/search
+Query Parameters:
+
+q: Search keyword for title and description (optional)
+minAge, maxAge: Age range filter (optional, numeric)
+category: Exact category filter (e.g., "Math", "Science") (optional)
+type: Exact type filter (e.g., "ONE_TIME", "COURSE", "CLUB") (optional)
+minPrice, maxPrice: Price range filter (optional, decimal)
+startDate: Filter courses on or after this ISO-8601 date (e.g., "2025-06-01T00:00:00Z") (optional)
+sort: Sort order (upcoming, priceAsc, priceDesc) (default: upcoming)
+page: Page number (default: 0)
+size: Results per page (default: 10)
+
+Example Requests:
+
+Search for "Physics" courses in the "Science" category, sorted by price ascending:
+curl "http://localhost:8080/api/search?q=Physics&category=Science&sort=priceAsc"
+
 Expected Response:
-```json
+{
+  "total": 5,
+  "courses": [
+    { "id": "1", "title": "Physics 101", "category": "Science", "price": 50.0, "nextSessionDate": "2025-06-10T15:00:00Z" },
+    ...
+  ]
+}
+
+
+Search courses for ages 10–14, starting after June 1, 2025:
+curl "http://localhost:8080/api/search?minAge=10&maxAge=14&startDate=2025-06-01T00:00:00Z"
+
+
+
+2. Autocomplete Suggestions (Assignment B - Implemented)
+Endpoint: GET /api/search/suggest
+Query Parameters:
+
+q: Partial title for autocomplete suggestions (required)
+
+Example Request:
+curl "http://localhost:8080/api/search/suggest?q=phy"
+
+Expected Response:
 [
   "Physics 101",
   "Physical Chemistry Basics",
   ...
 ]
-```
+
 3. Fuzzy Search (Assignment B - Not Implemented)
+
 The fuzzy search functionality for the /api/search endpoint (e.g., matching "dinors" to "Dinosaurs 101") is not implemented in this project.
 
-## Configuration
-- Application properties are defined in `src/main/resources/application.yml`:
-  ```yaml
-  spring:
-    elasticsearch:
-      uris: http://localhost:9200
-  ```
-- If Elasticsearch is running on a different host/port, update `application.yml` accordingly.
+Configuration
 
-## Notes
-- The `sample-courses.json` file contains 50 varied course entries with fields: `id`, `title`, `description`, `category`, `type`, `gradeRange`, `minAge`, `maxAge`, `price`, and `nextSessionDate`.
-- The application uses Spring Data Elasticsearch for simplicity, with Jackson for JSON parsing.
-- For Assignment B, the `courses` index includes a `suggest` field with a `completion` mapping for autocomplete.
+Application properties are defined in src/main/resources/application.yml:spring:
+  elasticsearch:
+    uris: http://localhost:9200
 
-## Troubleshooting
-- If Elasticsearch fails to start, ensure port 9200 is free and Docker has sufficient resources (at least 2GB RAM).
-- Check application logs (`logs/app.log`) for indexing or query errors.
+
+If Elasticsearch is running on a different host/port, update application.yml accordingly.
+
+
+Notes
+
+The sample-courses.json file contains 50 varied course entries with fields: id, title, description, category, type, gradeRange, minAge, maxAge, price, and nextSessionDate.
+The application uses Spring Data Elasticsearch for simplicity, with Jackson for JSON parsing.
+For Assignment B, the courses index includes a suggest field with a completion mapping for autocomplete. Fuzzy search is not implemented.
+
+Troubleshooting
+
+If Elasticsearch fails to start, ensure port 9200 is free and Docker has sufficient resources (at least 2GB RAM).
+Check application logs (logs/app.log) for indexing or query errors.
