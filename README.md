@@ -132,22 +132,6 @@ Expected Response:
 ]
 ```
 
-### 3. Fuzzy Search (Assignment B - Bonus)
-- Fuzzy matching is enabled on the `title` field in the `/api/search` endpoint.
-- Example: Search for "dinors" to match "Dinosaurs 101":
-  ```bash
-  curl "http://localhost:8080/api/search?q=dinors"
-  ```
-  Expected Response:
-  ```json
-  {
-    "total": 1,
-    "courses": [
-      { "id": "10", "title": "Dinosaurs 101", "category": "Science", "price": 75.0, "nextSessionDate": "2025-07-01T10:00:00Z" }
-    ]
-  }
-  ```
-
 ## Configuration
 - Application properties are defined in `src/main/resources/application.yml`:
   ```yaml
@@ -157,17 +141,6 @@ Expected Response:
   ```
 - If Elasticsearch is running on a different host/port, update `application.yml` accordingly.
 
-## Testing
-- Unit tests are located in `src/test/java` and cover service layer logic.
-- Integration tests use Testcontainers to spin up an ephemeral Elasticsearch instance:
-  ```bash
-  mvn test
-  ```
-- Example test cases verify:
-  - Correct filtering by category and age range
-  - Sorting by price and session date
-  - Fuzzy matching for titles (if Assignment B is implemented)
-
 ## Notes
 - The `sample-courses.json` file contains 50 varied course entries with fields: `id`, `title`, `description`, `category`, `type`, `gradeRange`, `minAge`, `maxAge`, `price`, and `nextSessionDate`.
 - The application uses Spring Data Elasticsearch for simplicity, with Jackson for JSON parsing.
@@ -176,4 +149,3 @@ Expected Response:
 ## Troubleshooting
 - If Elasticsearch fails to start, ensure port 9200 is free and Docker has sufficient resources (at least 2GB RAM).
 - Check application logs (`logs/app.log`) for indexing or query errors.
-- For Testcontainers issues, ensure Docker is running and accessible.
