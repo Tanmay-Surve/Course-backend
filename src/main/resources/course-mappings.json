@@ -1,0 +1,14 @@
+
+{
+"properties": {
+"id": { "type": "keyword" },
+"title": { "type": "text" },
+"description": { "type": "text" },
+"category": { "type": "keyword" },
+"type": { "type": "keyword" },
+"minAge": { "type": "integer" },
+"maxAge": { "type": "integer" },
+"price": { "type": "double" },
+"nextSessionDate": { "type": "date" }
+}
+}
